@@ -5,12 +5,13 @@ import Particles from 'react-particles-js'
 class Landing extends Component {
   render() {
     return (
-      <div>
+      <div className='landing'>
         <Particles 
+         height='300px'
          params={{
           "particles": {
               "number": {
-              "value": 20,
+              "value": 10,
               "density": {
                   "enable": true,
                   "value_area": 1000
@@ -112,8 +113,8 @@ class Landing extends Component {
           },
           "retina_detect": true
           }}
-     style={{background: `#101f6c`}}
         />
+        <span className='greeting'></span>
       </div>
     );
   }

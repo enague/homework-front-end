@@ -1,9 +1,31 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Permanent Marker', cursive;
 }
 
 .giph {
   height: 200px;
+  width: 200px;
+}
+
+.trending {
+  height: 500px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 40px;
+  box-shadow: inset 2px 2px 1px rgba(0,0,0,.05);
+  background: #e1deea;
+}
+
+.footer {
+  height: 200px;
+  padding: 30px;
+
+}
+
+.landing {
+  background: #e88d0d;
 }
