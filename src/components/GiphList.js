@@ -2,9 +2,11 @@ import React from 'react';
 
 import Giph from './Giph';
 
-const GiphList = () => (
+const GiphList = (props) => (
     <div className='container'>
-     <Giph />
+     {props.gifs.map((gif,i) => (
+         <Giph gif={gif} key={i}/>
+     ))}
     </div>
 )
 

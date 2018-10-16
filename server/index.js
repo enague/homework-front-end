@@ -1,48 +1,24 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const path = require('path');
 const axios = require('axios');
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors())
 
-// app.get('/words', function(req, res) {
-//     axios.get(`http://app.linkedin-reach.io/words?difficulty=${req.query.difficulty}`)
-//     .then((response) => {
-//         let dictionary = response.data.split('\n')
-//         return res.send(dictionary)
-//     })
-//     .catch((err) => {
-//         console.log(err)
-//         res.end()
-//     })
-// })
+app.get('/trending', function(req, res) {
+    axios.get('http://api.giphy.com/v1/gifs/trending?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=5')
+    .then((response) => {
+        let gifs = response.data.data.map((gif) => gif.user.avatar_url) 
+        return res.send(gifs)
+    })
+    .catch((err) => {
+        console.log(err)
+        res.end()
+    })
+})
 
-// app.get('/hint', function(req, res) {
-//     axios({
-//         method:'get',
-//         url: `https://od-api.oxforddictionaries.com/api/v1/entries/en/${req.query.word}`,
-//         headers: {
-//             "Accept": "application/json",
-//             "app_id": "1979f7b3",
-//             "app_key": "3d9597cf6645e10a85637234898a07d5"
-//         },
-//     })
-//     .then((response) => {
-//         return res.send(response.data.results)
-//     })
-//     .catch((err) => {
-//         console.log(err)
-//         res.end()
-//     })
-// })
-
-
-
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 app.listen(process.env.PORT || 8080);

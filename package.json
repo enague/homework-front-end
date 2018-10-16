@@ -2,6 +2,7 @@
   "name": "homework-front-end",
   "version": "1.0.0",
   "private": true,
+  "proxy": "http://localhost:8080/",
   "devDependencies": {
     "autoprefixer": "6.3.7",
     "babel-core": "6.11.4",
@@ -57,7 +58,7 @@
   "scripts": {
     "start": "node ./scripts/start.js",
     "build": "node ./scripts/build.js",
-    "server": "node ./server/index.js"
+    "server": "nodemon ./server/index.js"
   },
   "eslintConfig": {
     "extends": "./config/eslint.js"
