@@ -6,6 +6,7 @@ import Nav from './Nav';
 import Landing from './Landing';
 import GiphList from './GiphList';
 import Footer from './Footer';
+import GiphDetails from './GiphDetails';
 
 class App extends Component {
   constructor(props) {
@@ -15,14 +16,20 @@ class App extends Component {
       gifs: [],
       searched: [],
       query: null,
-    }
+      activeItem: {
+        title: '',
+        url: ''
+      }
+    };
+
     this.getTrendingGifs = this.getTrendingGifs.bind(this);
     this.searchGifs = this.searchGifs.bind(this);
+    this.getActiveItemInfo = this.getActiveItemInfo.bind(this);
   }
 
   componentDidMount() {
     this.getTrendingGifs();
-    this.searchGifs('dogs cats');
+    this.searchGifs('random');
   }
 
   getTrendingGifs() {
@@ -39,7 +46,6 @@ class App extends Component {
   }
 
   searchGifs(value, callback) {
-    console.log('it works')
     this.setState({
       query: value
     })
@@ -64,13 +70,33 @@ class App extends Component {
     })
   }
 
+
+  getActiveItemInfo(id) {
+    axios.get('http://localhost:8080/active', {
+      params: {
+        id: id
+      }
+    })
+    .then(res => {
+      let activeItem = res.data
+      console.log(activeItem)
+      this.setState({
+        activeItem
+      })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+  }
+
   render() {
     return (
       <div className="App">
        <Nav onSearch={this.searchGifs}/>
        {this.state.reveal_landing ? <Landing /> : null}
-       <GiphList gifs={this.state.gifs} title={'Trending Now...'}/>
-       <GiphList gifs={this.state.searched} title={`Searched for ${this.state.query}...`}/>
+       <GiphDetails details={this.state.activeItem}/>
+       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.gifs} title={'Trending Now...'}/>
+       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.searched} title={`Searched for ${this.state.query}...`}/>
        <Footer />
       </div>
     )

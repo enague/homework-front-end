@@ -114,7 +114,7 @@ class Landing extends Component {
           "retina_detect": true
           }}
         />
-        <span className='greeting'></span>
+        <span className='greeting'>Get Your Giphs in a Giffy</span>
       </div>
     );
   }

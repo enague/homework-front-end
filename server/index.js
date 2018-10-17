@@ -11,7 +11,7 @@ app.use(cors())
 app.get('/trending', function(req, res) {
     axios.get('http://api.giphy.com/v1/gifs/trending?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=10')
     .then((response) => {
-        let gifs = response.data.data.map((gif) => gif.images.original.url) 
+        let gifs = response.data.data.map((gif) => [gif.id, gif.images.original.url]) 
         return res.send(gifs)
     })
     .catch((err) => {
@@ -22,10 +22,9 @@ app.get('/trending', function(req, res) {
 
 app.get('/search', function(req, res) {
   let query = req.query.words
-  console.log('query', query)
   axios.get(`http://api.giphy.com/v1/gifs/search?q=${query}&api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=10`)
   .then((response) => {
-    let gifs = response.data.data.map((gif) => gif.images.original.url) 
+    let gifs = response.data.data.map((gif) => [gif.id, gif.images.original.url]) 
     console.log(gifs)
     return res.send(gifs)
   })
@@ -34,5 +33,25 @@ app.get('/search', function(req, res) {
       res.end()
   })
 })
+
+
+app.get('/active', function(req, res) {
+    let id = req.query.id
+    axios.get(`http://api.giphy.com/v1/gifs/${id}?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn`)
+    .then((response) => {
+      let gif = response.data.data
+      let active = {
+          title: gif.title,
+          url: gif.images.original.url
+      }
+      
+      return res.send(active)
+    })
+    .catch((err) => {
+        console.log(err)
+        res.end()
+    })
+  })
+
 
 app.listen(process.env.PORT || 8080);
