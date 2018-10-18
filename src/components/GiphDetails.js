@@ -55,25 +55,34 @@ class GiphDetails extends React.Component {
   })
  }
 
- render() {
-  let initialTitle = this.props.details.title.toUpperCase().split('BY')
-  let gifTitle = initialTitle[0]
-  let user = initialTitle[1]
+ titleExists(title){
+   if(title){
+    let initialTitle = title.toUpperCase().split('BY');
+    return initialTitle[0];
+   } else {
+     return 'GIFFY PRESENTS...';
+   }
+ }
 
+ render() {
   return (
    <div className='modal_style'>
      <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div className="modal-dialog modal-dialog-centered" role="document">
          <div className="modal-content">
          <div className="modal-header">
-             <button onClick={() => {this.clear()}}type="button" className="close" data-dismiss="modal" aria-label="Close">
-             <span aria-hidden="true">&times;</span>
-             </button>
+          <div className='user_avatar'>
+           <img className='user_modal'alt='user' src={this.props.details.avatar}></img>
+           <h2 style={{padding: '5px'}} >{this.props.details.user}</h2>
+          </div>
+          <button onClick={() => {this.clear()}}type="button" className="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+          </button>
          </div>
          <div className="modal-body">
            <div id='modal_title'>
-             <div>{gifTitle}</div>
-             <div>BY {user}</div>
+             <div>{this.titleExists(this.props.details.title)}</div>
+             <div>BY {this.props.details.user}</div>
            </div>
            <div className='row'>
             <div className='col-sm'>
@@ -98,10 +107,6 @@ class GiphDetails extends React.Component {
              <div onClick={() => {this.reveal('embed')}}>
               <i className="fas fa-code"></i>
               Embed
-             </div>
-             <div className='user_avatar'>
-              <img className='user_modal'alt='user' src={this.props.details.avatar}></img>
-              <div>{this.props.details.user}</div>
              </div>
             </div> 
            </div>

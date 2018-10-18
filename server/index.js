@@ -33,22 +33,21 @@ app.get('/search', function(req, res) {
   })
 })
 
-
 app.get('/active', function(req, res) {
     let id = req.query.id
     axios.get(`http://api.giphy.com/v1/gifs/${id}?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn`)
     .then((response) => {
       let gif = response.data.data;
       let active = {
-          title: gif.title,
-          url: gif.images.original.url,
-          short_link: gif.bitly_url,
-          social: gif.images.downsized_large.url,
-          mp4: gif.images.original.mp4,
-          small: gif.images.downsized.url,
-          embed: gif.embed_url,
-          user: gif.username,
-          avatar: gif.user.avatar_url
+          title: gif.title ? gif.title : '',
+          url: gif.images ? gif.images.original.url : '',
+          short_link: gif.bitly_url ? gif.bitly_url : '',
+          social: gif.images.downsized_large.url ? gif.images.downsized_large.url : '',
+          mp4: gif.images.original.mp4 ? gif.images.original.mp4 : '',
+          small: gif.images.downsized.url ? gif.images.downsized.url : '',
+          embed: gif.embed_url ? gif.embed_url : '',
+          user: gif.username ? gif.username : 'Anonymous',
+          avatar: gif.user ? gif.user.avatar_url : 'https://media.giphy.com/media/3ohc0W4869hlSOmTrG/giphy.gif'
       };
 
       return res.send(active);

@@ -48,17 +48,20 @@ body {
   h1 {
     color:white;
   }
+
+  p {
+    padding: 7px;
+  }
 }
 
 .user_modal{
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
 }
 
 .user_avatar {
   display: flex;
-  margin-top: 110px;
 }
 
 #modal_links {
@@ -66,10 +69,22 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 5px;
+  color: white;
+  cursor: pointer;
+
+  i {
+    padding: 5px;
+  }
 }
 
 .modal_style{
   font-family: Arial, Helvetica, sans-serif
+}
+
+
+.modal-body {
+  background: black;
 }
 
 #modal_title {
@@ -79,5 +94,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px
+  padding: 10px;
+  background: gray;
+  color: white;
 }
