@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js'
 
-
+//Uses react-particles for the interactive landing strip 
 class Landing extends Component {
   render() {
     return (

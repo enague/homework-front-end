@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Link,Media,Embed } from './Copy.js'
 
 
-class GiphDetails extends React.Component {
+class GiphDetails extends Component {
  constructor(props) {
   super(props);
   this.state ={
@@ -16,7 +16,7 @@ class GiphDetails extends React.Component {
   this.clear = this.clear.bind(this);
  }
 
-
+//Reusable function to see which Copy component to render based on state
  reveal(type) {
   if(type ==='links') {
    this.setState({
@@ -46,6 +46,7 @@ class GiphDetails extends React.Component {
   }
  }
 
+ //Used to reset state of modal to display GIPH
  clear() {
   this.setState({
     reveal_gif: true,
@@ -55,6 +56,7 @@ class GiphDetails extends React.Component {
   })
  }
 
+ //Used to split title from the API
  titleExists(title){
    if(title){
     let initialTitle = title.toUpperCase().split('BY');
@@ -80,7 +82,7 @@ class GiphDetails extends React.Component {
           </button>
          </div>
          <div className="modal-body">
-           <div id='modal_title'>
+           <div onClick={() => {this.clear()}} id='modal_title'>
              <div>{this.titleExists(this.props.details.title)}</div>
              <div>BY {this.props.details.user}</div>
            </div>
@@ -93,7 +95,7 @@ class GiphDetails extends React.Component {
             </div> 
             <div className='col-sm' id='modal_links'>
              <div>
-             <i className="far fa-heart"></i>
+              <i onClick={() => {this.props.favorited([this.props.details.id,this.props.details.url])}} className="far fa-heart"></i>
               Favorite
               </div>
              <div onClick={() => {this.reveal('links')}}>
