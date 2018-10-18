@@ -51,7 +51,6 @@ class App extends Component {
     })
 
     let words = value.split(' ').join('+')
-    console.log('words', words)
     axios.get('http://localhost:8080/search', {
       params: {
         words: words
