@@ -1,26 +1,26 @@
 import React from 'react';
 
 //Presentational component to allow user to go to other pages on the site
-const Footer = () => (
+const Footer = (props) => (
     <div className='footer'>
      <div className='container'>
       <div className='row'>
        <div className='col-sm'>
         <h2>Categories</h2>
-         <ul>
-          <a>Sports</a>
-          <a>Entertainment</a>
-          <a>Trending</a>
-          <a>Random</a>
-         </ul>
+         <div>
+          <div className='footer_links' onClick={() => {props.onSearch('Sports')}}>Sports</div>
+          <div className='footer_links' onClick={() => {props.onSearch('Entertainment')}}>Entertainment</div>
+          <div className='footer_links' onClick={() => {props.onSearch('Trending')}}>Trending</div>
+          <div className='footer_links' onClick={() => {props.onSearch('Random')}}>Random</div>
+         </div>
        </div>
        <div className='col-sm'>
         <h2>About Us</h2>
-        <ul>
-          <a>Careers</a>
-          <a>FAQ</a>
-          <a>Contacts</a>
-         </ul>
+        <div>
+          <div className='footer_links'>Careers</div>
+          <div className='footer_links'>FAQ</div>
+          <div className='footer_links'>Contacts</div>
+         </div>
        </div>
        <div className='col-sm'>
         <h2>Follow Us</h2>
@@ -32,7 +32,7 @@ const Footer = () => (
        </div>
       </div>
      </div>
-     <div style={{padding: '5px', fontSize: '12px', fontStyle: 'italic'}}><i className="far fa-copyright"></i> 2018 By Eric Nague. Proudly created by yours truly</div>
+     <div style={{padding: '5px', fontSize: '12px', fontStyle: 'italic', float: 'right'}}><i className="far fa-copyright"></i> 2018 By Eric Nague. Proudly created by yours truly</div>
     </div>
 )
 

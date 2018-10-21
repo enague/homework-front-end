@@ -7,16 +7,17 @@ import Landing from './Landing';
 import GiphList from './GiphList';
 import Footer from './Footer';
 import GiphDetails from './GiphDetails';
+import Searched from './Searched';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gifs: [],
-      searched: [],
-      entertainment: [],
-      sports: [],
+      gifs: Array(20).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
+      searched: Array(20).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
       reveal_favorites: false,
+      reveal_landing: true,
+      reveal_searched: true,
       favorites: [],
       query: null,
       activeItem: {}
@@ -27,17 +28,21 @@ class App extends Component {
     this.getActiveItemInfo = this.getActiveItemInfo.bind(this);
     this.favoriteGif = this.favoriteGif.bind(this);
     this.seeFavorites = this.seeFavorites.bind(this);
+    this.clearLanding = this.clearLanding.bind(this);
   }
 
   componentDidMount() {
     this.getTrendingGifs();
-    this.searchGifs('entertainment');
-    this.searchGifs('sports');
-    this.searchGifs('random');
+    this.searchGifs('trending');
   }
 
   //Asks server to get all trending gifs urls to store in state
   getTrendingGifs() {
+    let loadingArr = this.state.searched.fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif'])
+    this.setState({
+      gifs: loadingArr
+    })
+
     axios.get('http://localhost:8080/trending')
     .then(res => {
       let gifs = res.data
@@ -54,8 +59,10 @@ class App extends Component {
   //When component mounts, I display a GraphList component for queries for 'entertainment' and 'sports'
   searchGifs(value, callback) {
     this.setState({
-      query: value
-    })
+      query: value,
+      reveal_favorites: false,
+      reveal_searched: false
+    });
 
     let words = value.split(' ').join('+')
     axios.get('http://localhost:8080/search', {
@@ -65,18 +72,16 @@ class App extends Component {
     })
     .then(res => {
       let searched = res.data
+      let loadingArr = Array(20).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif'])
 
-      value === 'entertainment' ? this.setState({
-        entertainment: searched
-      }) : null
-
-      value === 'sports' ? this.setState({
-        sports: searched
-      }) : null
+      this.setState({
+        reveal_searched: true,
+        searched: loadingArr
+      })
 
       this.setState({
         searched
-      })
+      });
 
       if(callback){
         callback()
@@ -109,13 +114,33 @@ class App extends Component {
 
   //Allows user to favorite gifs and store them in state
   favoriteGif(info) {
-    let favorites = [
-      ...this.state.favorites, info
-    ]
+    let id = info[0];
+    let isInFavorites = false;
+    let favorited = this.state.favorites;
 
-    this.setState({
-      favorites
-    })
+    for(let i=0; i < favorited.length; i++) {
+      if(favorited[i][0] === id) {
+        isInFavorites = true;
+        favorited.splice(i, 1);
+        this.setState({
+          favorites: favorited
+        });
+
+        return false;
+      }
+    }
+    
+    if(!isInFavorites) {
+      let favorites = [
+        ...this.state.favorites, info
+      ]
+  
+      this.setState({
+        favorites
+      })
+      return true;
+    }
+
   }
 
   //Allows user to see all their favorited gifs
@@ -125,18 +150,24 @@ class App extends Component {
     }));
   }
 
+  clearLanding(){
+    this.setState({
+      reveal_landing: false
+    })
+  }
+
+
+
   render() {
     return (
       <div className="App">
-       <Nav seeFavorites={this.seeFavorites} onSearch={this.searchGifs}/>
-       <Landing />
+       <Nav clearLanding={this.clearLanding} seeFavorites={this.seeFavorites} onSearch={this.searchGifs}/>
+       {this.state.reveal_landing ? <Landing /> : null}
        <GiphDetails favorited={this.favoriteGif} details={this.state.activeItem}/>
-       {this.state.reveal_favorites ? <GiphList clicked={this.getActiveItemInfo} gifs={this.state.favorites} title={`Favorites...`}/> : null}
-       <GiphList  clicked={this.getActiveItemInfo} gifs={this.state.searched} title={`Searched for ${this.state.query}...`}/>
        <GiphList clicked={this.getActiveItemInfo} gifs={this.state.gifs} title={'Trending Now...'}/>
-       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.entertainment} title={`Entertainment...`}/>
-       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.sports} title={`Sports...`}/>
-       <Footer />
+       {this.state.reveal_favorites ? <Searched clicked={this.getActiveItemInfo} gifs={this.state.favorites} title={`Favorites...`}/> : null}
+       {this.state.reveal_searched ? <Searched clicked={this.getActiveItemInfo} gifs={this.state.searched} title={`Searched for ${this.state.query}..`} /> : null}
+       <Footer onSearch={this.searchGifs}/>
       </div>
     )
   }

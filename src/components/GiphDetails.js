@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import { Link,Media,Embed } from './Copy.js'
+import { Link,Media,Embed } from './Copy';
+import { Success, Failure } from './FavAlert';
 
 
 class GiphDetails extends Component {
@@ -10,7 +11,9 @@ class GiphDetails extends Component {
    reveal_gif: true,
    reveal_links: false,
    reveal_media: false,
-   reveal_embed: false
+   reveal_embed: false,
+   was_favorited: false,
+   was_notfavorited: false,
   }
   this.reveal = this.reveal.bind(this);
   this.clear = this.clear.bind(this);
@@ -52,8 +55,10 @@ class GiphDetails extends Component {
     reveal_gif: true,
     reveal_media: false,
     reveal_links: false,
-    reveal_embed: false
-  })
+    reveal_embed: false,
+    was_favorited: false,
+    was_notfavorited: false
+  });
  }
 
  //Used to split title from the API
@@ -65,6 +70,24 @@ class GiphDetails extends Component {
      return 'GIFFY PRESENTS...';
    }
  }
+
+ //show Alert to user if gif was favorited
+ showAlert(value) {
+  //if value false show failure
+  //if value true show success
+  if(value) {
+    this.setState({
+      was_favorited: true,
+      was_notfavorited: false
+    });
+  } else {
+    this.setState({
+      was_favorited: false,
+      was_notfavorited: true
+    });
+  }
+ }
+ 
 
  render() {
   return (
@@ -86,6 +109,8 @@ class GiphDetails extends Component {
              <div>{this.titleExists(this.props.details.title)}</div>
              <div>BY {this.props.details.user}</div>
            </div>
+           {this.state.was_favorited ? <Success /> : null}
+           {this.state.was_notfavorited ? <Failure /> : null}
            <div className='row'>
             <div className='col-sm'>
              {this.state.reveal_gif ? <img style={{height: '300px', width: '300px'}} alt='gif' src={this.props.details.url}></img> : null}
@@ -95,7 +120,7 @@ class GiphDetails extends Component {
             </div> 
             <div className='col-sm' id='modal_links'>
              <div>
-              <i onClick={() => {this.props.favorited([this.props.details.id,this.props.details.url])}} className="far fa-heart"></i>
+              <i onClick={() => {this.showAlert(this.props.favorited([this.props.details.id,this.props.details.url]))}} className="far fa-heart"></i>
               Favorite
               </div>
              <div onClick={() => {this.reveal('links')}}>

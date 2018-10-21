@@ -2,7 +2,8 @@ import React from 'react';
 
 ////Presentational component to display the gif with ability to click gif
 //Can activate modal with all info of that specific GIPH
-const Giph = (props) => (
+//can maximaize with hover
+export const Giph = (props) => (
     <div>
         <img onClick={() => {props.clicked(props.id)}} 
             data-toggle="modal" 
@@ -14,4 +15,18 @@ const Giph = (props) => (
     </div>
 )
 
-export default Giph;
+////Presentational component to display the gif with ability to click gif
+//Can activate modal with all info of that specific GIPH 
+//cannot maximaize with hover
+ export const GiphCarousel = (props) => (
+    <div>
+        <img onClick={() => {props.clicked(props.id)}} 
+            data-toggle="modal" 
+            data-target="#exampleModalCenter" 
+            className='giph_carousel' 
+            alt='gif_carousel' 
+            src={props.gif}>
+         </img>
+    </div>
+)
+

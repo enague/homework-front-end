@@ -5,7 +5,8 @@ import Particles from 'react-particles-js'
 class Landing extends Component {
   render() {
     return (
-      <div className='landing'>
+     <div>
+      <div  className='landing'>
         <Particles 
          height='300px'
          params={{
@@ -116,6 +117,7 @@ class Landing extends Component {
         />
         <span className='greeting'>Get Your Giphs in a Giffy</span>
       </div>
+     </div>
     );
   }
 }
