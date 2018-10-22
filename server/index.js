@@ -10,7 +10,7 @@ app.use(cors())
 
 //Gets all trending gifs urls from GIPHY API
 app.get('/trending', function(req, res) {
-    axios.get('http://api.giphy.com/v1/gifs/trending?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=20')
+    axios.get('http://api.giphy.com/v1/gifs/trending?api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=30')
     .then((response) => {
         let gifs = response.data.data.map((gif) => [gif.id, gif.images.original.url]); 
         return res.send(gifs);
@@ -24,7 +24,7 @@ app.get('/trending', function(req, res) {
 //Gets the gifs urls from GIPHY API based on query from search
 app.get('/search', function(req, res) {
   let query = req.query.words
-  axios.get(`http://api.giphy.com/v1/gifs/search?q=${query}&api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=20`)
+  axios.get(`http://api.giphy.com/v1/gifs/search?q=${query}&api_key=wtJN9K7MfH2iWmFotqiHC9leXzTHxgkn&limit=500`)
   .then((response) => {
     let gifs = response.data.data.map((gif) => [gif.id, gif.images.original.url]); 
     return res.send(gifs);

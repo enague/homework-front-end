@@ -13,8 +13,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gifs: Array(20).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
-      searched: Array(20).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
+      trending: Array(25).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
+      searched: [],
+      visibleGifs: [],
+      default: Array(25).fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif']),
+      hasMore: true,
       reveal_favorites: false,
       reveal_landing: true,
       reveal_searched: true,
@@ -29,8 +32,11 @@ class App extends Component {
     this.favoriteGif = this.favoriteGif.bind(this);
     this.seeFavorites = this.seeFavorites.bind(this);
     this.clearLanding = this.clearLanding.bind(this);
+    this.seeMoreGifs = this.seeMoreGifs.bind(this);
+    this.getMoreGifs = this.getMoreGifs.bind(this);
   }
 
+  //when component mounts, get trending gifs to load into carousel and query trending gifs to load into searched gifs
   componentDidMount() {
     this.getTrendingGifs();
     this.searchGifs('trending');
@@ -40,15 +46,15 @@ class App extends Component {
   getTrendingGifs() {
     let loadingArr = this.state.searched.fill(['id','https://media.giphy.com/media/3og0IKYORMdd5s3HDq/giphy.gif'])
     this.setState({
-      gifs: loadingArr
+      trending: loadingArr
     })
 
     axios.get('http://localhost:8080/trending')
     .then(res => {
       let gifs = res.data
       this.setState({
-        gifs
-      })
+        trending: gifs
+      });
     })
     .catch(err => {
       console.log(err)
@@ -76,12 +82,21 @@ class App extends Component {
 
       this.setState({
         reveal_searched: true,
-        searched: loadingArr
+        visibleGifs: loadingArr
       })
 
       this.setState({
         searched
       });
+
+      let length = this.state.visibleGifs.length;
+      if(length < 25) {
+        let visible = this.state.searched.slice(0,25);
+
+        this.setState({
+          visibleGifs: visible
+        });
+      } 
 
       if(callback){
         callback()
@@ -93,6 +108,30 @@ class App extends Component {
     })
   }
 
+  //function to call the getMoreGifs to load more gifs from searched into visible gifs
+  seeMoreGifs(){
+    if (this.state.visibleGifs.length >= 100) {
+      this.setState({ hasMore: false });
+      return;
+    }
+
+    setTimeout(() => {
+      this.getMoreGifs()
+    }, 500);
+  }
+
+  //searched array has all the available gifs from API so we grab the ones 
+  //that aren't shown to load them into visible array
+  getMoreGifs() {
+    let length = this.state.visibleGifs.length;
+    let more = this.state.searched.slice(length, length + 10);
+    let visible = this.state.visibleGifs.concat(more)
+
+    this.setState({
+      visibleGifs: visible
+    }); 
+  }
+
   //Asks server to get necessary info about a gif based on a specific id 
   getActiveItemInfo(id) {
     axios.get('http://localhost:8080/active', {
@@ -102,7 +141,6 @@ class App extends Component {
     })
     .then(res => {
       let activeItem = res.data
-      console.log(activeItem)
       this.setState({
         activeItem
       })
@@ -148,6 +186,10 @@ class App extends Component {
     this.setState(state => ({
       reveal_favorites: !state.reveal_favorites
     }));
+
+    this.setState(state => ({
+      reveal_searched: !state.reveal_searched
+    }));
   }
 
   clearLanding(){
@@ -164,9 +206,10 @@ class App extends Component {
        <Nav clearLanding={this.clearLanding} seeFavorites={this.seeFavorites} onSearch={this.searchGifs}/>
        {this.state.reveal_landing ? <Landing /> : null}
        <GiphDetails favorited={this.favoriteGif} details={this.state.activeItem}/>
-       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.gifs} title={'Trending Now...'}/>
-       {this.state.reveal_favorites ? <Searched clicked={this.getActiveItemInfo} gifs={this.state.favorites} title={`Favorites...`}/> : null}
-       {this.state.reveal_searched ? <Searched clicked={this.getActiveItemInfo} gifs={this.state.searched} title={`Searched for ${this.state.query}..`} /> : null}
+       <GiphList clicked={this.getActiveItemInfo} gifs={this.state.trending} title={'Trending Now...'}/>
+       {this.state.reveal_favorites ? <Searched seeMoreGifs={this.seeMoreGifs} clicked={this.getActiveItemInfo} gifs={this.state.favorites} title={`Favorites...`}/> : null}
+        {this.state.reveal_searched ? <Searched seeMoreGifs={this.seeMoreGifs} hasMore={this.state.hasMore} clicked={this.getActiveItemInfo} gifs={this.state.visibleGifs} title={`Searched for ${this.state.query}...`} /> :
+        <Searched seeMoreGifs={this.seeMoreGifs} hasMore={this.state.hasMore} clicked={this.getActiveItemInfo} gifs={this.state.default} /> }
        <Footer onSearch={this.searchGifs}/>
       </div>
     )

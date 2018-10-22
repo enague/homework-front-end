@@ -68,7 +68,7 @@ class GiphList extends Component {
   };
   return (
    <div style={{padding: '30px'}} className='container'>
-    <h3>{this.props.title}</h3>
+    <h3>{this.props.title}</h3> <br />
      {this.props.gifs.length > 0 && 
      <Slider {...settings}>
        {this.props.gifs.map((gif,i) => (

@@ -32,7 +32,6 @@ const Footer = (props) => (
        </div>
       </div>
      </div>
-     <div style={{padding: '5px', fontSize: '12px', fontStyle: 'italic', float: 'right'}}><i className="far fa-copyright"></i> 2018 By Eric Nague. Proudly created by yours truly</div>
     </div>
 )
 
