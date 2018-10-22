@@ -51,6 +51,7 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.4",
+    "prop-types": "^15.6.2",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-infinite-scroll-component": "^4.2.0",

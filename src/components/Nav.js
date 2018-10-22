@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 
 class Nav extends Component {
  constructor(props) {
@@ -88,6 +88,10 @@ class Nav extends Component {
 
 }
 
+
+Nav.propTypes = {
+ value: PropTypes.string,
+};
 
 export default Nav;
 

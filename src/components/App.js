@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios'
 import '../scss/index.scss';
 
@@ -22,7 +23,7 @@ class App extends Component {
       reveal_landing: true,
       reveal_searched: true,
       favorites: [],
-      query: null,
+      query: '',
       activeItem: {}
     };
 
@@ -110,7 +111,7 @@ class App extends Component {
 
   //function to call the getMoreGifs to load more gifs from searched into visible gifs
   seeMoreGifs(){
-    if (this.state.visibleGifs.length >= 100) {
+    if (this.state.visibleGifs.length >= 500) {
       this.setState({ hasMore: false });
       return;
     }
@@ -215,5 +216,19 @@ class App extends Component {
     )
   }
 }
+
+App.propTypes = {
+  trending: PropTypes.array,
+  searched: PropTypes.array,
+  visibleGifs: PropTypes.array,
+  default: PropTypes.array,
+  hasMore: PropTypes.bool,
+  reveal_favorites: PropTypes.bool,
+  reveal_landing: PropTypes.bool,
+  reveal_searched: PropTypes.bool,
+  favorites: PropTypes.array,
+  query: PropTypes.string,
+  activeItem: PropTypes.object
+};
 
 export default App;

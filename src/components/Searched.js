@@ -6,29 +6,23 @@ import { Giph } from './Giph';
 const style = {
  display: 'flex',
  flexWrap: 'wrap',
+ padding: '54px 54px 90px',
+ display: 'flex',
+ justifyContent: 'center',
 }
 
 class Searched extends Component {
  constructor(props) {
   super(props);
-  this.state={
-  };
+  this.state={};
  }
-
- 
-
  render() {
   return (
-   <div style={{paddingBottom: '90px'}} className='container'>
-    {/* <h3>{this.props.title}</h3>
-    <div className='searched_box'>
-     {this.props.gifs.map((gif,i) => (
-         <div>
-         <Giph id={gif[0]} clicked={this.props.clicked} gif={gif[1]} key={i}/>
-         </div>
-     ))}
-    </div> */}
-    <h3>{this.props.title === "Searched for trending..." ? null : this.props.title}</h3>
+  <div>
+    {this.props.title === "Searched for trending..." ? null : 
+    <div  className='container'>
+     <h3>{this.props.title}</h3>
+    </div>}
     <div >
     <InfiniteScroll
           style={style}
